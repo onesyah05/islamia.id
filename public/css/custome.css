@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+body {
+    font-family: 'Lato', sans-serif;
+    background: #f1f1f1;
+    color: #4B5563;
+}
+
+.app-container {
+    max-width: 480px;
+    height: 100vh;
+    /* penuh setinggi layar */
+    margin: 0 auto;
+    /* posisikan horizontal di tengah */
+    box-sizing: border-box;
+    background-color: #ffffff;
+    /* opsional: warna latar belakang */
+}
+
+.head-home {
+    width: 100%;
+    height: 165px;
+    background: #16B8A8;
+    padding: 10px;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 60px 15px 20px;
+    border-radius: 25px;
+    border: none;
+    background-color: #129284;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.feature-card-container {
+    position: relative;
+    margin-top: -50px;
+    height: 145px; /* Sesuaikan dengan kebutuhan */
+    max-width: 500px;
+  }
+  
+  /* Card dasar */
+  .feature-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #6FFFD2;
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 1;
+  }
+  
+  /* Konten card */
+  .card-content {
+    width: 60%;
+  }
+  
+  /* Label kelas populer */
+  .card-label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Judul card */
+  .card-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #663399;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  
+  /* Subtitle card */
+  .card-subtitle {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 15px;
+    line-height: 1.4;
+  }
+  
+  /* Tombol daftar */
+  .card-button {
+    display: inline-block;
+    background-color: #333;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  /* Container gambar */
+  .card-image-container {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    bottom: -10px;
+    width: 45%;
+    z-index: 5;
+    /* overflow: hidden; */
+  }
+  
+  /* Gambar ustadz */
+  .card-image {
+    margin-top: -10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom-right-radius: 20px;
+  }
+
+/* nav bottom */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    height: 65px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    /* shadow atas */
+    z-index: 1000;
+}
+
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    transition: filter 0.3s;
+}
+
+.nav-icon img {
+    width: 24px;
+    /* Filter untuk membuat gambar menjadi abu-abu */
+    filter: grayscale(100%) brightness(0.5);
+    opacity: 1;
+    transition: filter 0.3s ease;
+    /* Untuk animasi transisi yang halus */
+}
+
+/* Untuk icon yang aktif */
+.nav-icon.active img {
+    /* Filter untuk mengubah warna menjadi #16B8A8 */
+    filter: brightness(0) saturate(100%) invert(66%) sepia(33%) saturate(670%) hue-rotate(128deg) brightness(86%) contrast(89%);
+}
+
+/* Efek hover agar user tahu ikon dapat diklik */
+.nav-icon:hover img {
+    filter: brightness(0) saturate(100%) invert(66%) sepia(33%) saturate(670%) hue-rotate(128deg) brightness(86%) contrast(89%);
+}
+
+.not {
+    width: 9px;
+    height: 9px;
+    background: #16B8A8;
+    position: fixed;
+    margin-left: 1.3rem;
+    margin-top: -0.5rem;
+    border-radius: 100%;
+}
