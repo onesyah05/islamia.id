@@ -15,4 +15,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('front.pages.home');
-});
+})->name('home');
+
+Route::get('/detail', function () {
+    return view('front.pages.detail');
+})->name('detail');
+
+Route::get('/ask', function () {
+    return view('front.pages.question');
+})->name('ask');
+
+Route::get('/class', function () {
+    return view('front.pages.maintanance');
+})->name('class');
+
+Route::get('/collaction', function () {
+    return view('front.pages.collaction');
+})->name('collaction');
