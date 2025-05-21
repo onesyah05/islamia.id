@@ -1,4 +1,18 @@
 @extends('front.layouts.app')
+@section('meta')
+    <meta property="og:title" content="{{ $question->title }}">
+    <meta property="og:description" content="{{ Str::limit(strip_tags($question->content), 200) }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $question->title }}">
+    <meta name="twitter:description" content="{{ Str::limit(strip_tags($question->content), 200) }}">
+    @if($question->categories->isNotEmpty())
+        <meta property="article:tag" content="{{ $question->categories->pluck('name')->join(', ') }}">
+    @endif
+    <meta property="article:published_time" content="{{ $question->created_at->toIso8601String() }}">
+    <meta property="article:modified_time" content="{{ $question->updated_at->toIso8601String() }}">
+@endsection
 
 <style>
         .button-container {
@@ -32,22 +46,26 @@
 @section('title', 'Detail')
 
 @section('content')
-    @include('front.components.header_detail')
+    @include('front.components.header_detail',['title'=> $question->title ])
     <div class="container">
-        @include('front.components.float_btn')
+        @include('front.components.float_btn',['question'=>$question])
         <div class="row">
             <div class="post-header">
                 <h1 class="post-title">
-                    Bagaimana hukum shalat ketika sedang dalam perjalanan?
+                    {{ $question->title }}
                 </h1>
 
+                <div class="post-meta mb-2">
+                    @foreach($question->categories as $category)
+                        <span class="badge">{{ $category->name }}</span>
+                    @endforeach
+                </div>
                 <div class="post-meta">
-                    <span class="badge">Sholat</span>
                     <span class="meta-item">
-                        <i class="fa fa-calendar-o"></i> Jum’at, 22 April 2025
+                        <i class="fa fa-calendar-o"></i> {{ $question->created_at->format('l, d F Y') }}
                     </span>
                     <span class="meta-item">
-                        <i class="fa fa-eye"></i> 2251x Dibaca
+                        <i class="fa fa-eye"></i> {{ $question->views }}x Dibaca
                     </span>
                 </div>
             </div>
@@ -56,88 +74,73 @@
         <div class="row" style="margin-left: 10px;margin-rigth:10px">
             <div class="col">
                 <small>Penanya</small>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-                    scrambled it to make a type specimen book?</p>
+                <p>{!! $question->content !!}</p>
             </div>
         </div>
-        <div class="row" style="margin-left: 10px;margin-right:10px">
-            <div class="col">
-                <small>Jawaban</small>
-                <p>The question of whether a marriage can be valid without a guardian (wali) is one that has been discussed
-                    extensively in Islamic jurisprudence. To provide a comprehensive answer, we must examine the various
-                    scholarly opinions and their evidences from the Quran and Sunnah.
-
-                    The majority of scholars, including those from the Shafi'i, Maliki, and Hanbali schools of thought, hold
-                    that the presence of a guardian is a necessary condition for the validity of a marriage. They base this
-                    on several evidences from the Quran and Sunnah.</p>
-                <p style="text-align: right">وَأَنكِحُوا الْأَيَامَىٰ مِنكُمْ وَالصَّالِحِينَ مِنْ عِبَادِكُمْ وَإِمَائِكُمْ
-                </p>
-                <p>"And marry those among you who are single and the righteous among your male slaves and female slaves."
-                    (Quran 24:32)</p>
-                <p>The question of whether a marriage can be valid without a guardian (wali) is one that has been discussed
-                    extensively in Islamic jurisprudence. To provide a comprehensive answer, we must examine the various
-                    scholarly opinions and their evidences from the Quran and Sunnah.
-
-                    The majority of scholars, including those from the Shafi'i, Maliki, and Hanbali schools of thought, hold
-                    that the presence of a guardian is a necessary condition for the validity of a marriage. They base this
-                    on several evidences from the Quran and Sunnah.</p>
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="profile-card">
-                    <div class="profile-image"></div>
-                    <div class="profile-text">
-                        <strong>Dr. Mushab Aljuhani</strong><br>
-                        <span>Professor of Islamic Law at Al-Azhar University with over 20 years of experience in Islamic
-                            jurisprudence. Specialized in family law and contemporary fiqh issues.</span>
+        @if($question->answers->count() > 0)
+            @foreach($question->answers as $answer)
+                <div class="row" style="margin-left: 10px;margin-right:10px">
+                    <div class="col">
+                        <small>Jawaban</small>
+                        <p>{!! $answer->content !!}</p>
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col">
+                        <div class="profile-card">
+                            <div class="profile-image"></div>
+                            <div class="profile-text">
+                                <strong>{{ $answer->user->name }}</strong><br>
+                                <span>{{ $answer->user->ustadzDetail->bio ?? 'Ustadz' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        @else
+            <div class="row" style="margin-left: 10px;margin-right:10px">
+                <div class="col">
+                    <p>Belum ada jawaban untuk pertanyaan ini.</p>
+                </div>
             </div>
-        </div>
+        @endif
 
         <br>
         <div class="row">
             <div class="col">
                 <div class="title-bar">
-                    <p class="kiri"><b>Pertanyaan Terkai</b></p>
+                    <p class="kiri"><b>Pertanyaan Terkait</b></p>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="container-horizontal">
-                @for ($i = 0; $i < 10; $i++)
+                @foreach($question->categories->first()->questions->take(10) as $relatedQuestion)
                     <div class="card">
                         <div class="card-body">
                             <div class="title-bar-card">
-                                <span class="kiri">Muamalah</span>
-                                <a href="#" class="kanan">22 April 2025</i></a>
+                                <span class="kiri">{{ $relatedQuestion->categories->first()->name }}</span>
+                                <a href="#" class="kanan">{{ $relatedQuestion->created_at->format('d F Y') }}</a>
                             </div>
                             <div class="content-card">
-                                <span class="title"><b>Bagaimana hukum shalat ketika sedang dalam
-                                        perjalanan?</b></span><br>
-                                <span class="des">Saya sering bepergian untuk urusan bisnis. Bagaimana ketentuan shalat
-                                    jamak dan qashar...</span><br>
-                                <a href="#" class="detail">Selengkapnya</a>
+                                <span class="title"><b>{{ $relatedQuestion->title }}</b></span><br>
+                                <span class="des">{{ Str::limit($relatedQuestion->content, 100) }}</span><br>
+                                <a href="{{ route('questions.show', $relatedQuestion->slug) }}" class="detail">Selengkapnya</a>
                             </div>
                         </div>
                     </div>
-                @endfor
+                @endforeach
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col">
                 <div class="button-container">
-                    <a href="#" class="teal-button">Ajukan Pertanyaan</a>
+                    <a href="{{ route('questions.create') }}" class="teal-button">Ajukan Pertanyaan</a>
                 </div>
             </div>
         </div>
         <br>
         <br>
     </div>
-
 @endsection

@@ -3,11 +3,13 @@
 @section('title', 'Ajukan Pertanyaan')
 
 @section('content')
+
     <div class="container">
         <div class="question-container" style="margin: 10px">
             <!-- Question Input Form -->
-            <form id="questionForm">
-                <textarea class="form-control question-input" placeholder="Tulis pertanyaan kamu disini" id="questionText"></textarea>
+            <form id="questionForm" action="{{ route('questions.store') }}" method="POST">
+                @csrf
+                <textarea class="form-control question-input" name="content" placeholder="Tulis pertanyaan kamu disini" id="questionText"></textarea>
                 <button type="submit" class="btn question-button">Ajukan Pertanyaan</button>
             </form>
 
@@ -19,45 +21,35 @@
 
             <!-- Unanswered Questions List -->
             <div class="question-list question-list-unanswered">
+                @foreach($questions->where('is_answered', false) as $question)
                 <div class="question-item">
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-                        and scrambled it to make a type specimen book?</p>
+                    <div class="title-bar-card">
+                        {{-- <span class="kiri">{{ $question->categories->first()->name }}</span> --}}
+                        <span class="kanan">{{ $question->created_at->format('d F Y') }}</span>
+                    </div>
+                    <p>{{ $question->content }}</p>
                 </div>
-                <div class="question-item">
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-                        and scrambled it to make a type specimen book?</p>
-                </div>
-                <div class="question-item">
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-                        and scrambled it to make a type specimen book?</p>
-                </div>
+                @endforeach
             </div>
 
             <!-- Answered Questions List -->
             <div class="question-list question-list-answered">
+                @foreach($questions->where('is_answered', true) as $question)
                 <div class="question-item">
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-                        and scrambled it to make a type specimen book?</p>
-                    <div class="question-answer">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. This is an answer to
-                            the question above.</p>
+                    <div class="title-bar-card">
+                        <span class="kiri">{{ $question->categories->first()->name }}</span>
+                        <span class="kanan">{{ $question->created_at->format('d F Y') }}</span>
                     </div>
-                </div>
-                <div class="question-item">
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-                        and scrambled it to make a type specimen book?</p>
+                    <p>{{ $question->content }}</p>
                     <div class="question-answer">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. This is an answer to
-                            the question above. <a
-                                href="#">http://islamia.id/detail?question=akupadamukamupadaku_1234</a></p>
+                        <p>{{ $question->answers->first()->content ?? 'Belum ada jawaban' }}</p>
                     </div>
+                    <a href="{{ route('questions.show', $question->slug) }}" class="detail">Selengkapnya</a>
                 </div>
+                @endforeach
             </div>
+
+            {{ $questions->links() }}
         </div>
         <br>
         <br>
@@ -67,30 +59,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
             $(document).ready(function() {
-                // Form submission
-                $("#questionForm").submit(function(e) {
-                    e.preventDefault();
-                    const questionText = $("#questionText").val().trim();
-
-                    if (questionText !== "") {
-                        // Add new question to the unanswered list
-                        $(".question-list-unanswered").prepend(`
-                            <div class="question-item">
-                                <p>${questionText}</p>
-                            </div>
-                        `);
-
-                        // Clear the form
-                        $("#questionText").val("");
-
-                        // Make sure we're viewing the unanswered questions
-                        $(".question-status-unanswered").click();
-
-                        // Add click event to new question item
-                        addQuestionClickHandlers();
-                    }
-                });
-
                 // Toggle between answered and unanswered
                 $(".question-status-unanswered").click(function() {
                     $(this).addClass("active");

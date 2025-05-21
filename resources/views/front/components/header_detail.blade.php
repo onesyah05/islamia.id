@@ -77,11 +77,15 @@
 
 
 
-<div id="header" class="header">
+<div id="header" class="header {{ !Route::is('questions.show') ? 'scrolled' : '' }}">
     <div class="header-content">
-        <div class="icon"><a href="javascript:history.back()"><img style="width: 24px" src="{{ asset('icons/left.png') }}" alt="" srcset=""></a></div>
-        <div class="title">Bagaimana hukum shalat ketik...</div>
-        <div class="icon" id="shareButton"><img style="width: 24px" src="{{ asset('icons/share.png') }}" alt="" srcset=""></div>
+        <div class="icon"><a href="javascript:history.back()"><img style="width: 24px" src="{{ asset('icons/left.png') }}"
+                    alt="" srcset=""></a></div>
+        <div class="title">{{ $title }}</div>
+        @if (Route::is('questions.show'))
+            <div class="icon" id="shareButton"><img style="width: 24px" src="{{ asset('icons/share.png') }}"
+                    alt="" srcset=""></div>
+        @endif
     </div>
 </div>
 

@@ -156,7 +156,7 @@
 
         <!-- Tombol panah atas -->
         <button class="fab-sub">
-            <a href="#"><img style="width: 24px" src="{{ asset('icons/vector.png') }}" alt="" srcset=""></a>
+            <a href="{{ route('bookmarks.store', $question->id) }}"><img style="width: 24px" src="{{ asset('icons/vector.png') }}" alt="" srcset=""></a>
         </button>
 
         <!-- Divider -->

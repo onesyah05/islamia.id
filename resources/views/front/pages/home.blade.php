@@ -6,9 +6,9 @@
 <div class="container">
     <div class="row">
         <div class="head-home">
-            <form action="" method="get">
+            <form action="{{ route('search.questions') }}" method="GET">
                 <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Cari tahu tentang islam">
+                    <input type="text" class="search-input" placeholder="Cari tahu tentang islam" name="q">
                     <div class="search-icon"><i class="fa fa-search"></i></div>
                 </div>
             </form>
@@ -42,21 +42,21 @@
     </div>
     <div class="row">
       <div class="container-horizontal">
-        @for ($i = 0; $i < 10; $i++)
+        @foreach ($latestQuestions as $question)
         <div class="card">
           <div class="card-body">
             <div class="title-bar-card">
-              <span class="kiri">Muamalah</span>
-              <a href="#" class="kanan">22 April 2025</i></a>
+              <span class="kiri">{{ $question->categories[mt_rand(0,count($question->categories)-1)]->name }}</span>
+              <a href="#" class="kanan">{{ $question->created_at->format('d F Y') }}</a>
             </div>
             <div class="content-card">
-              <span class="title"><b>Bagaimana hukum shalat ketika sedang dalam perjalanan?</b></span><br>
-              <span class="des">Saya sering bepergian untuk urusan bisnis. Bagaimana ketentuan shalat jamak dan qashar...</span><br>
-              <a href="/detail" class="detail">Selengkapnya</a>
+              <span class="title"><b>{{ $question->title }}</b></span><br>
+              <span class="des">{{ Str::limit($question->content, 100) }}</span><br>
+              <a href="{{ route('questions.show', $question->slug) }}" class="detail">Selengkapnya</a>
             </div>  
           </div>
-        </div>
-        @endfor
+        </div> 
+        @endforeach
       </div>
     </div>
     
@@ -70,21 +70,21 @@
     </div>
     <div class="row">
       <div class="container-horizontal">
-        @for ($i = 0; $i < 10; $i++)
+        @foreach ($popularQuestions as $question)
         <div class="card">
           <div class="card-body">
             <div class="title-bar-card">
-              <span class="kiri">Muamalah</span>
-              <a href="#" class="kanan">22 April 2025</i></a>
+              <span class="kiri">{{ $question->categories[mt_rand(0,count($question->categories)-1)]->name }}</span>
+              <a href="#" class="kanan">{{ $question->created_at->format('d F Y') }}</a>
             </div>
             <div class="content-card">
-              <span class="title"><b>Bagaimana hukum shalat ketika sedang dalam perjalanan?</b></span><br>
-              <span class="des">Saya sering bepergian untuk urusan bisnis. Bagaimana ketentuan shalat jamak dan qashar...</span><br>
-              <a href="/detail" class="detail">Selengkapnya</a>
+              <span class="title"><b>{{ $question->title }}</b></span><br>
+              <span class="des">{{ Str::limit($question->content, 100) }}</span><br>
+              <a href="{{ route('questions.show', $question->slug) }}" class="detail">Selengkapnya</a>
             </div>  
           </div>
         </div>
-        @endfor
+        @endforeach
       </div>
     </div>
     <br>
